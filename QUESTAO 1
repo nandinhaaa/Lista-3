@@ -1,3 +1,5 @@
+//Defina uma estrutura que irá representar bandas de música. 
+
 #include <stdio.h>
 #include <string.h>
 #define MAX 10
