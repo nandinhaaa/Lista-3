@@ -1,0 +1,228 @@
+#include<stdio.h>
+int max = 100;
+int qtd = 0;
+typedef struct alunos{
+	int matriculas;
+	char nome[50];
+	double nota1;
+	double nota2;
+	double nota3;
+}taluno;
+
+int menu(){
+	int op;
+	printf("*** SISTEMA DE CADASTRO DE ALUNOS ****\n");
+	printf(" 1- Inserira um novo aluno\n");
+	printf(" 2- Mostrar todos os alunos \n");
+	printf(" 3- Salvar como arquivo txt\n");
+	printf(" 4- Carregar arquivo txt\n");
+	printf(" 5- Buscar o aluno por matricula\n");
+	printf(" 6- Buscar aluno pelo nome\n");
+	printf(" 7- Aluno com a maior media em geral\n");
+	printf(" 8- Alunos aprovados e reprovados\n");
+	
+	printf("0- Para Sair\n");
+	scanf("%d",&op);
+	return op;
+}
+
+void cadastrarAluno(taluno aluno[]){
+	printf("***** DADOS PARA O  ALUNO %d *****\n",qtd+1);
+	
+	printf("matriculas:\n");
+	scanf("%d",&aluno[qtd].matriculas);
+	
+	printf("Nome:\n");
+	fflush(stdin);
+	gets(aluno[qtd].nome);
+	
+	printf("Nota da prova 1:\n");
+	scanf("%lf",&aluno[qtd].nota1);
+	
+	printf("Nota na prova 2:\n");
+	scanf("%lf",&aluno[qtd].nota2);
+	
+	printf("Nota na prova 3:\n");
+	scanf("%lf",&aluno[qtd].nota3);
+	
+	qtd++;
+}
+
+void mostraAlunos(taluno aluno[]){
+	int c;
+	for(c=0;c<qtd;c++){
+		
+		printf("\n**** DADOS PARA ALUNO %d ****\n",c+1);
+		printf("matriculas:%d\n",aluno[c].matriculas);
+		printf("Nome:%s\n",aluno[c].nome);
+		printf("Nota na prova 1 :%.2lf\n",aluno[c].nota1);
+		printf("Nota na prova 2 :%.2lf\n",aluno[c].nota2);
+		printf("Nota na prova 3 :%.2lf\n",aluno[c].nota3);
+	}
+}
+
+void salvarDados(taluno aluno[]){
+	int c;
+	FILE *arq;
+	arq = fopen("alunos.txt","w");
+	fprintf(arq,"%d\n",qtd);
+	
+	for(c=0;c<qtd;c++){
+		fprintf(arq,"%i\n",aluno[c].matriculas);
+		fprintf(arq,"%s\n",aluno[c].nome);
+		fprintf(arq,"%lf\n",aluno[c].nota1);
+		fprintf(arq,"%lf\n",aluno[c].nota2);
+		fprintf(arq,"%lf\n",aluno[c].nota3);
+	}
+	printf("Dados salvos: )");
+}
+
+void carregaDados(taluno aluno[]){
+	FILE *arq;
+	int c;
+	arq = fopen("alunos.txt","r");
+	if(arq==NULL){
+		printf("Arquivo nao encontrado :(\n");
+		return;
+	}
+	fscanf(arq,"%d",&qtd);
+	for(c=0;c<qtd;c++){
+		fscanf(arq,"%i",&aluno[c].matriculas);
+		fscanf(arq,"%s",&aluno[c].nome);
+		fscanf(arq,"%lf",&aluno[c].nota1);
+		fscanf(arq,"%lf",&aluno[c].nota2);
+		fscanf(arq,"%lf",&aluno[c].nota3);
+	}
+	fclose(arq);
+	printf("Dados carregados com sucesso :)\n");
+}
+
+void buscarAlunomatriculas(taluno aluno[]){
+	int c,matriculas,encontrou;
+	printf("\nDigite a matricula do aluno a ser encontrado:\n");
+	scanf("%d",&matriculas);
+	for(c=0;c<qtd;c++){
+		if(matriculas == aluno[c].matriculas){
+			printf("\n**** DADOS PARA ALUNO %d *****\n",c+1);
+			printf("matriculas:%d\n",aluno[c].matriculas);
+			printf("Nome:%s\n",aluno[c].nome);
+			printf("Nota na prova 1:%.2lf\n",aluno[c].nota1);
+			printf("Nota na prova 2:%.2lf\n",aluno[c].nota2);
+			printf("Nota na prova 3:%.2lf\n",aluno[c].nota3);	
+		}
+		
+		
+	}
+
+}
+
+void buscarAlunoNome(taluno aluno[]){
+	
+	int c,encontrou;
+	char nome[50];
+	printf("\nDigite o nome do aluno a ser buscado:\n");
+	fflush(stdin);
+	gets(nome);
+	for(c=0;c<qtd;c++){
+		if(strcmp(strupr(nome),strupr(aluno[c].nome)) == 0){
+			printf("\n***** DADOS PARA OS ALUNOS %d *****\n",qtd+1);
+			printf("matriculas:%d\n",aluno[c].matriculas);
+			printf("Nome:%s\n",aluno[c].nome);
+			printf("Nota na prova 1:%.2lf\n",aluno[c].nota1);
+			printf("Nota na prova 2:%.2lf\n",aluno[c].nota2);
+			printf("Nota na prova 3:%.2lf\n",aluno[c].nota3);	
+			encontrou=1;
+		}
+}
+
+void maiorMedia(taluno aluno[]){
+	int maiorPosicao,c;
+	double media,maior;
+	maior = (aluno[0].nota1 + aluno[0].nota2 + aluno[0].nota3)/3;
+	for(c=0;c<qtd;c++){
+		media = (aluno[c].nota1 + aluno[c].nota2 + aluno[c].nota3)/3;
+		if(media>maior){
+			maior=media;
+			maiorPosicao = c;
+		}
+	}
+	
+	printf("\n O aluno com maior media e:\n");
+	
+	printf("\n***** Dados para aluno %d *****\n",maiorPosicao+1);
+	printf("matriculas:%d\n",aluno[maiorPosicao].matriculas);
+	printf("Nome:%s\n",aluno[maiorPosicao].nome);
+	printf("Nota na prova 1:%.2lf\n",aluno[maiorPosicao].nota1);
+	printf("Nota na prova 2:%.2lf\n",aluno[maiorPosicao].nota2);
+	printf("Nota na prova 3:%.2lf\n",aluno[maiorPosicao].nota3);
+	printf("Media:%.2lf\n",maior);
+	
+
+}
+
+void alunosAprovados(taluno aluno[]){
+	int c;
+	double media;
+	
+	printf("\nALUNOS APROVADOS:\n");
+	printf("matriculas - NOME - MEDIA\n");
+	for(c=0;c<=qtd;c++){
+			media = (aluno[c].nota1 + aluno[c].nota2 + aluno[c].nota3)/3;
+		if(media>6){
+			media = (aluno[c].nota1 + aluno[c].nota2 + aluno[c].nota3)/3;
+			printf("\n%d - %s - %.2lf",aluno[c].matriculas,aluno[c].nome,media);		
+		}
+	}
+	
+	printf("\nALUNOS REPROVADOS:\n");
+	printf("matriculas - NOME - MEDIA\n");
+	for(c=0;c<qtd;c++){
+			media = (aluno[c].nota1 + aluno[c].nota2 + aluno[c].nota3)/3;
+		if(media<6){
+			media = (aluno[c].nota1 + aluno[c].nota2 + aluno[c].nota3)/3;
+			printf("\n%d - %s - %.2lf",aluno[c].matriculas,aluno[c].nome,media);		
+		}
+	}
+	
+}
+
+int main(){
+	int op=0;
+	taluno aluno[max];
+	
+	do{
+		op = menu();
+		switch(op){
+			case 1:
+				cadastrarAluno(aluno);					
+				break;
+			case 2:
+				mostraAlunos(aluno);
+				break;
+				
+			case 3:
+				salvarDados(aluno);
+				break;
+			case 4:
+				carregaDados(aluno);
+				break;
+			case 5:
+				buscarAlunomatriculas(aluno);
+				break;
+			case 6:
+				buscarAlunoNome(aluno);
+				break;
+			case 7:
+				maiorMedia(aluno);
+				break;	
+			case 8:
+				alunosAprovados(aluno);
+				break;
+		}
+		
+      	getch();
+      	system("cls");
+      	
+	}
+	while(op!=0);
+	return 0;
