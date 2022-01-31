@@ -1,0 +1,13 @@
+4
+Chuveiro
+3.5
+0.450000
+Geladeira
+0.2
+10.000000
+Microondas
+1.3
+0.200000
+Ventilador
+0.1
+8.000000
